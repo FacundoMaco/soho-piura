@@ -25,34 +25,55 @@ export default async function HorarioPage({ searchParams }: PageProps) {
 
   if (!estilista_id) {
     return (
-      <main className="min-h-screen bg-white px-4 py-16 sm:px-8">
+      <main className="min-h-screen px-4 py-16 sm:px-8" style={{ background: "var(--bg)" }}>
         <div className="mx-auto max-w-lg">
           <header className="mb-12">
             <Link
               href={`/reservar/servicio?sede_id=${sede_id}`}
-              className="text-xs text-zinc-400 hover:text-[#C9A84C] transition-colors tracking-wide uppercase"
+              className="text-xs tracking-wide uppercase transition-colors"
+              style={{ color: "var(--text-secondary)" }}
             >
-              Volver
+              ← Volver
             </Link>
-            <p className="text-xs tracking-widest uppercase text-[#C9A84C] mt-6 mb-1">
+            <p className="text-3xl font-black tracking-tight uppercase mt-8 mb-1" style={{ color: "var(--text)" }}>
+              SOHO<span style={{ color: "var(--primary)" }}>●</span>.color
+            </p>
+            <p className="text-xs uppercase tracking-widest mb-4" style={{ color: "var(--primary)" }}>
               {sedeRes.data.nombre}
             </p>
-            <h1 className="text-3xl font-semibold tracking-tight">{servicioRes.data.nombre}</h1>
-            <p className="mt-2 text-sm text-zinc-500">Selecciona tu estilista</p>
+            <h1 className="text-2xl font-semibold tracking-tight" style={{ color: "var(--text)" }}>
+              {servicioRes.data.nombre}
+            </h1>
+            <p className="mt-2 text-sm" style={{ color: "var(--text-secondary)" }}>
+              Selecciona tu estilista
+            </p>
           </header>
 
           {estilistas.length === 0 ? (
-            <p className="text-sm text-zinc-400">No hay estilistas disponibles en esta sede.</p>
+            <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
+              No hay estilistas disponibles en esta sede.
+            </p>
           ) : (
             <div className="flex flex-col gap-3">
               {estilistas.map((e) => (
                 <Link
                   key={e.id}
                   href={`/reservar/horario?sede_id=${sede_id}&servicio_id=${servicio_id}&estilista_id=${e.id}`}
-                  className="flex items-center justify-between rounded-xl border border-zinc-200 px-6 py-5 transition-all hover:border-[#C9A84C] hover:shadow-sm"
+                  className="flex items-center justify-between rounded-xl px-6 py-5 transition-all"
+                  style={{ background: "var(--bg-card)", border: "1px solid var(--border)" }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLElement).style.borderColor = "var(--primary)";
+                    (e.currentTarget as HTMLElement).style.boxShadow = "0 2px 8px rgba(232,25,44,0.12)";
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLElement).style.borderColor = "var(--border)";
+                    (e.currentTarget as HTMLElement).style.boxShadow = "none";
+                  }}
                 >
-                  <span className="text-sm font-medium text-zinc-800">{e.nombre}</span>
-                  <svg className="h-4 w-4 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <span className="text-sm font-medium" style={{ color: "var(--text)" }}>
+                    {e.nombre}
+                  </span>
+                  <svg className="h-4 w-4" style={{ color: "var(--text-secondary)" }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                   </svg>
                 </Link>
@@ -68,21 +89,27 @@ export default async function HorarioPage({ searchParams }: PageProps) {
   if (!estilistaSeleccionado) notFound();
 
   return (
-    <main className="min-h-screen bg-white px-4 py-16 sm:px-8">
+    <main className="min-h-screen px-4 py-16 sm:px-8" style={{ background: "var(--bg)" }}>
       <div className="mx-auto max-w-lg">
         <header className="mb-12">
           <Link
             href={`/reservar/horario?sede_id=${sede_id}&servicio_id=${servicio_id}`}
-            className="text-xs text-zinc-400 hover:text-[#C9A84C] transition-colors tracking-wide uppercase"
+            className="text-xs tracking-wide uppercase transition-colors"
+            style={{ color: "var(--text-secondary)" }}
           >
-            Volver
+            ← Volver
           </Link>
-          <p className="text-xs tracking-widest uppercase text-[#C9A84C] mt-6 mb-1">
+          <p className="text-3xl font-black tracking-tight uppercase mt-8 mb-1" style={{ color: "var(--text)" }}>
+            SOHO<span style={{ color: "var(--primary)" }}>●</span>.color
+          </p>
+          <p className="text-xs uppercase tracking-widest mb-4" style={{ color: "var(--primary)" }}>
             {sedeRes.data.nombre}
           </p>
-          <h1 className="text-3xl font-semibold tracking-tight">{servicioRes.data.nombre}</h1>
-          <p className="mt-2 text-sm text-zinc-500">
-            Con <span className="font-medium text-zinc-700">{estilistaSeleccionado.nombre}</span> — elige fecha y hora
+          <h1 className="text-2xl font-semibold tracking-tight" style={{ color: "var(--text)" }}>
+            {servicioRes.data.nombre}
+          </h1>
+          <p className="mt-2 text-sm" style={{ color: "var(--text-secondary)" }}>
+            Con <span className="font-medium" style={{ color: "var(--text)" }}>{estilistaSeleccionado.nombre}</span> — elige fecha y hora
           </p>
         </header>
 

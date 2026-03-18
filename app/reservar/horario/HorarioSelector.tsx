@@ -93,7 +93,11 @@ export default function HorarioSelector({ sede_id, servicio_id, estilistas, esti
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-2">
-        <label className="text-xs font-medium text-zinc-500 uppercase tracking-wide" htmlFor="fecha">
+        <label
+          className="text-xs font-medium uppercase tracking-wide"
+          style={{ color: "var(--text-secondary)" }}
+          htmlFor="fecha"
+        >
           Fecha
         </label>
         <input
@@ -102,17 +106,32 @@ export default function HorarioSelector({ sede_id, servicio_id, estilistas, esti
           value={fecha}
           min={todayString()}
           onChange={(e) => setFecha(e.target.value)}
-          className="w-full rounded-lg border border-zinc-200 px-4 py-3 text-sm focus:border-[#C9A84C] focus:outline-none focus:ring-1 focus:ring-[#C9A84C]"
+          className="w-full rounded-lg px-4 py-3 text-sm focus:outline-none"
+          style={{
+            background: "var(--bg-card)",
+            border: "1px solid var(--border)",
+            color: "var(--text)",
+          }}
+          onFocus={(e) => {
+            (e.currentTarget as HTMLElement).style.borderColor = "var(--primary)";
+            (e.currentTarget as HTMLElement).style.boxShadow = "0 0 0 1px var(--primary)";
+          }}
+          onBlur={(e) => {
+            (e.currentTarget as HTMLElement).style.borderColor = "var(--border)";
+            (e.currentTarget as HTMLElement).style.boxShadow = "none";
+          }}
         />
       </div>
 
       <div>
-        <p className="text-xs font-medium text-zinc-500 uppercase tracking-wide mb-4">
+        <p className="text-xs font-medium uppercase tracking-wide mb-4" style={{ color: "var(--text-secondary)" }}>
           Horarios disponibles
         </p>
 
         {loading && (
-          <p className="text-sm text-zinc-400">Buscando horarios disponibles...</p>
+          <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
+            Buscando horarios disponibles...
+          </p>
         )}
 
         {!loading && error && (
@@ -120,7 +139,7 @@ export default function HorarioSelector({ sede_id, servicio_id, estilistas, esti
         )}
 
         {!loading && !error && slots.length === 0 && (
-          <p className="text-sm text-zinc-400">
+          <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
             No hay horarios disponibles para esta fecha. Prueba con otro día.
           </p>
         )}
@@ -131,7 +150,20 @@ export default function HorarioSelector({ sede_id, servicio_id, estilistas, esti
               <button
                 key={slot.inicio}
                 onClick={() => handleSlotClick(slot)}
-                className="rounded-lg border border-zinc-200 px-3 py-3 text-sm font-medium text-zinc-700 transition-all hover:border-[#C9A84C] hover:text-[#C9A84C] hover:shadow-sm active:scale-95"
+                className="rounded-lg px-3 py-3 text-sm font-medium transition-all active:scale-95"
+                style={{
+                  background: "var(--bg-card)",
+                  border: "1px solid var(--primary)",
+                  color: "var(--primary)",
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLElement).style.background = "var(--primary)";
+                  (e.currentTarget as HTMLElement).style.color = "#ffffff";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLElement).style.background = "var(--bg-card)";
+                  (e.currentTarget as HTMLElement).style.color = "var(--primary)";
+                }}
               >
                 {formatSlotHora(slot.inicio)}
               </button>

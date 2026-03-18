@@ -43,10 +43,6 @@ function generateSlots(apertura: string, cierre: string): string[] {
   return slots
 }
 
-function slotLabel(slot: string): string {
-  return slot
-}
-
 function reservaCoversSlot(reserva: Reserva, slot: string, fecha: string): boolean {
   const slotDt = new Date(`${fecha}T${slot}:00`)
   const rInicio = new Date(reserva.fecha_inicio)
@@ -68,10 +64,10 @@ function reservaSpanSlots(reserva: Reserva): number {
   return Math.ceil(diffMs / (30 * 60 * 1000))
 }
 
-function cellBg(estado: Reserva['estado']): string {
-  if (estado === 'pendiente') return 'bg-yellow-100 border-yellow-300 text-yellow-900'
-  if (estado === 'confirmada') return 'bg-green-100 border-green-300 text-green-900'
-  return 'bg-gray-100 border-gray-300 text-gray-600'
+function cellStyle(estado: Reserva['estado']): React.CSSProperties {
+  if (estado === 'pendiente') return { background: '#fff8e1', border: '1px solid #ffe082', color: '#7c5e00' }
+  if (estado === 'confirmada') return { background: '#e8f5e9', border: '1px solid #a5d6a7', color: '#1b5e20' }
+  return { background: '#f5f5f5', border: '1px solid #e0e0e0', color: '#666666' }
 }
 
 const SLOT_HEIGHT_PX = 48
@@ -141,23 +137,36 @@ export default function AgendaPage() {
   const slots = sede ? generateSlots(sede.horario_apertura, sede.horario_cierre) : []
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200 px-6 py-4">
+    <div className="min-h-screen" style={{ background: 'var(--bg)' }}>
+      <header className="px-6 py-4" style={{ background: 'var(--bg-card)', borderBottom: '1px solid var(--border)' }}>
         <div className="max-w-screen-xl mx-auto flex flex-col sm:flex-row sm:items-center gap-4">
-          <h1 className="text-xl font-semibold text-gray-900 shrink-0">
-            Agenda — Soho Piura
-          </h1>
-          <div className="flex flex-wrap gap-3 sm:ml-auto">
+          <div className="flex items-center gap-3">
+            <span className="text-xl font-black tracking-tight uppercase" style={{ color: 'var(--text)' }}>
+              SOHO<span style={{ color: 'var(--primary)' }}>●</span>.color
+            </span>
+            <span className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>/ Agenda</span>
+          </div>
+          <div className="flex flex-wrap gap-3 sm:ml-auto items-center">
             <input
               type="date"
               value={fecha}
               onChange={(e) => setFecha(e.target.value)}
-              className="border border-gray-300 rounded px-3 py-1.5 text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-gray-400"
+              className="rounded px-3 py-1.5 text-sm focus:outline-none"
+              style={{
+                border: '1px solid var(--border)',
+                background: 'var(--bg-card)',
+                color: 'var(--text)',
+              }}
             />
             <select
               value={sedeId}
               onChange={(e) => setSedeId(e.target.value)}
-              className="border border-gray-300 rounded px-3 py-1.5 text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-gray-400"
+              className="rounded px-3 py-1.5 text-sm focus:outline-none"
+              style={{
+                border: '1px solid var(--border)',
+                background: 'var(--bg-card)',
+                color: 'var(--text)',
+              }}
             >
               {sedes.map((s) => (
                 <option key={s.id} value={s.id}>
@@ -166,7 +175,9 @@ export default function AgendaPage() {
               ))}
             </select>
             {loading && (
-              <span className="text-sm text-gray-400 self-center">Cargando...</span>
+              <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                Cargando...
+              </span>
             )}
           </div>
         </div>
@@ -174,18 +185,32 @@ export default function AgendaPage() {
 
       <main className="max-w-screen-xl mx-auto px-4 py-6 overflow-x-auto">
         {slots.length === 0 ? (
-          <p className="text-gray-400 text-sm">Selecciona una sede para ver la agenda.</p>
+          <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+            Selecciona una sede para ver la agenda.
+          </p>
         ) : (
           <table className="w-full border-collapse text-sm">
             <thead>
               <tr>
-                <th className="w-16 text-left text-xs font-medium text-gray-500 uppercase px-2 py-2 border-b border-gray-200 bg-gray-50 sticky left-0 z-10">
+                <th
+                  className="w-16 text-left text-xs font-medium uppercase px-2 py-2 sticky left-0 z-10"
+                  style={{
+                    color: 'var(--text-secondary)',
+                    borderBottom: '1px solid var(--border)',
+                    background: 'var(--bg)',
+                  }}
+                >
                   Hora
                 </th>
                 {estilistas.map((est) => (
                   <th
                     key={est.id}
-                    className="text-center text-xs font-medium text-gray-700 uppercase px-3 py-2 border-b border-gray-200 bg-gray-50 min-w-[140px]"
+                    className="text-center text-xs font-semibold uppercase px-3 py-2 min-w-[140px]"
+                    style={{
+                      color: 'var(--text)',
+                      borderBottom: '2px solid var(--primary)',
+                      background: 'var(--bg)',
+                    }}
                   >
                     {est.nombre}
                   </th>
@@ -194,9 +219,12 @@ export default function AgendaPage() {
             </thead>
             <tbody>
               {slots.map((slot) => (
-                <tr key={slot} className="border-b border-gray-100">
-                  <td className="text-xs text-gray-400 font-mono px-2 py-0 align-top sticky left-0 bg-gray-50 z-10" style={{ height: SLOT_HEIGHT_PX }}>
-                    <span className="leading-none pt-1 block">{slotLabel(slot)}</span>
+                <tr key={slot} style={{ borderBottom: '1px solid var(--border)' }}>
+                  <td
+                    className="text-xs font-mono px-2 py-0 align-top sticky left-0 z-10"
+                    style={{ height: SLOT_HEIGHT_PX, color: 'var(--text-secondary)', background: 'var(--bg)' }}
+                  >
+                    <span className="leading-none pt-1 block">{slot}</span>
                   </td>
                   {estilistas.map((est) => {
                     const reserva = reservas.find(
@@ -214,8 +242,8 @@ export default function AgendaPage() {
                         <td
                           key={est.id}
                           rowSpan={span}
-                          className={`px-2 py-1 border border-opacity-60 rounded align-top ${cellBg(reserva.estado)}`}
-                          style={{ height: SLOT_HEIGHT_PX * span, verticalAlign: 'top' }}
+                          className="px-2 py-1 align-top rounded"
+                          style={{ ...cellStyle(reserva.estado), height: SLOT_HEIGHT_PX * span, verticalAlign: 'top' }}
                         >
                           <p className="font-medium text-xs leading-tight truncate">
                             {reserva.cliente_nombre}
@@ -235,8 +263,7 @@ export default function AgendaPage() {
                     return (
                       <td
                         key={est.id}
-                        className="bg-white border border-gray-100"
-                        style={{ height: SLOT_HEIGHT_PX }}
+                        style={{ height: SLOT_HEIGHT_PX, background: 'var(--bg-card)', border: '1px solid var(--border)' }}
                       />
                     )
                   })}
