@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
 import Link from "next/link";
 
@@ -23,19 +23,7 @@ function formatFechaHora(iso: string): string {
   });
 }
 
-const inputStyle = {
-  background: "var(--bg-card)",
-  border: "1px solid var(--border)",
-  color: "var(--text)",
-  borderRadius: "0.5rem",
-  padding: "0.75rem 1rem",
-  width: "100%",
-  fontSize: "0.875rem",
-  outline: "none",
-};
-
 function ConfirmacionForm() {
-  const router = useRouter();
   const searchParams = useSearchParams();
 
   const sede_id = searchParams.get("sede_id") ?? "";
@@ -99,13 +87,9 @@ function ConfirmacionForm() {
   if (state.status === "success") {
     return (
       <div className="flex flex-col gap-6 text-center">
-        <div
-          className="mx-auto flex h-16 w-16 items-center justify-center rounded-full"
-          style={{ border: "2px solid var(--primary)" }}
-        >
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border-2 border-[#E8192C]">
           <svg
-            className="h-7 w-7"
-            style={{ color: "var(--primary)" }}
+            className="h-7 w-7 text-[#E8192C]"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -115,24 +99,20 @@ function ConfirmacionForm() {
           </svg>
         </div>
         <div>
-          <h2 className="text-2xl font-semibold tracking-tight" style={{ color: "var(--text)" }}>
+          <h2 className="text-2xl font-semibold tracking-tight text-[#0a0a0a]">
             Reserva confirmada
           </h2>
-          <p className="mt-2 text-sm" style={{ color: "var(--text-secondary)" }}>
+          <p className="mt-2 text-sm text-[#666666]">
             Te esperamos el{" "}
-            <span className="font-medium" style={{ color: "var(--text)" }}>
-              {formatFechaHora(fecha_inicio)}
-            </span>
-            .
+            <span className="font-medium text-[#0a0a0a]">{formatFechaHora(fecha_inicio)}</span>.
           </p>
         </div>
-        <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
+        <p className="text-sm text-[#666666]">
           ¿Necesitas cambiar tu cita? Llámanos o escríbenos al WhatsApp del salón.
         </p>
         <Link
           href="/"
-          className="mx-auto text-xs underline underline-offset-4 transition-colors"
-          style={{ color: "var(--text-secondary)" }}
+          className="mx-auto text-xs text-[#666666] hover:text-[#E8192C] transition-colors underline underline-offset-4"
         >
           Volver al inicio
         </Link>
@@ -144,26 +124,21 @@ function ConfirmacionForm() {
 
   return (
     <div className="flex flex-col gap-8">
-      <div
-        className="rounded-xl px-6 py-5 flex flex-col gap-2"
-        style={{ background: "var(--bg-card)", border: "1px solid var(--border)" }}
-      >
-        <p className="text-xs uppercase tracking-widest mb-1" style={{ color: "var(--text-secondary)" }}>
-          Resumen
-        </p>
+      <div className="rounded-xl bg-white border border-[#e0e0e0] px-6 py-5 flex flex-col gap-2">
+        <p className="text-xs uppercase tracking-widest text-[#666666] mb-1">Resumen</p>
         {estilista_nombre && (
-          <p className="text-sm" style={{ color: "var(--text)" }}>
+          <p className="text-sm text-[#0a0a0a]">
             <span className="font-medium">Estilista:</span> {estilista_nombre}
           </p>
         )}
-        <p className="text-sm" style={{ color: "var(--text)" }}>
+        <p className="text-sm text-[#0a0a0a]">
           <span className="font-medium">Fecha y hora:</span>{" "}
           {formatFechaHora(fecha_inicio)}
         </p>
       </div>
 
       {state.status === "conflict" && (
-        <div className="rounded-lg px-4 py-3" style={{ background: "#fff0f1", border: "1px solid #fca5a5" }}>
+        <div className="rounded-lg bg-[#fff0f1] border border-red-200 px-4 py-3">
           <p className="text-sm text-red-600">
             Este horario ya no está disponible.{" "}
             <Link href={horarioVolver} className="font-medium underline">
@@ -175,16 +150,17 @@ function ConfirmacionForm() {
       )}
 
       {state.status === "error" && (
-        <div className="rounded-lg px-4 py-3" style={{ background: "#fff0f1", border: "1px solid #fca5a5" }}>
-          <p className="text-sm text-red-600">{(state as { status: "error"; message: string }).message}</p>
+        <div className="rounded-lg bg-[#fff0f1] border border-red-200 px-4 py-3">
+          <p className="text-sm text-red-600">
+            {(state as { status: "error"; message: string }).message}
+          </p>
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
         <div className="flex flex-col gap-2">
           <label
-            className="text-xs font-medium uppercase tracking-wide"
-            style={{ color: "var(--text-secondary)" }}
+            className="text-xs font-medium uppercase tracking-wide text-[#666666]"
             htmlFor="nombre"
           >
             Nombre completo
@@ -196,22 +172,13 @@ function ConfirmacionForm() {
             value={nombre}
             onChange={(e) => setNombre(e.target.value)}
             placeholder="Tu nombre"
-            style={inputStyle}
-            onFocus={(e) => {
-              (e.currentTarget as HTMLElement).style.borderColor = "var(--primary)";
-              (e.currentTarget as HTMLElement).style.boxShadow = "0 0 0 1px var(--primary)";
-            }}
-            onBlur={(e) => {
-              (e.currentTarget as HTMLElement).style.borderColor = "var(--border)";
-              (e.currentTarget as HTMLElement).style.boxShadow = "none";
-            }}
+            className="w-full rounded-lg bg-white border border-[#e0e0e0] px-4 py-3 text-sm text-[#0a0a0a] focus:outline-none focus:border-[#E8192C] focus:ring-1 focus:ring-[#E8192C]"
           />
         </div>
 
         <div className="flex flex-col gap-2">
           <label
-            className="text-xs font-medium uppercase tracking-wide"
-            style={{ color: "var(--text-secondary)" }}
+            className="text-xs font-medium uppercase tracking-wide text-[#666666]"
             htmlFor="whatsapp"
           >
             Numero WhatsApp
@@ -223,29 +190,14 @@ function ConfirmacionForm() {
             value={whatsapp}
             onChange={(e) => setWhatsapp(e.target.value)}
             placeholder="987 654 321"
-            style={inputStyle}
-            onFocus={(e) => {
-              (e.currentTarget as HTMLElement).style.borderColor = "var(--primary)";
-              (e.currentTarget as HTMLElement).style.boxShadow = "0 0 0 1px var(--primary)";
-            }}
-            onBlur={(e) => {
-              (e.currentTarget as HTMLElement).style.borderColor = "var(--border)";
-              (e.currentTarget as HTMLElement).style.boxShadow = "none";
-            }}
+            className="w-full rounded-lg bg-white border border-[#e0e0e0] px-4 py-3 text-sm text-[#0a0a0a] focus:outline-none focus:border-[#E8192C] focus:ring-1 focus:ring-[#E8192C]"
           />
         </div>
 
         <button
           type="submit"
           disabled={state.status === "loading"}
-          className="mt-2 w-full rounded-full py-4 text-sm font-semibold text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          style={{ background: "var(--primary)" }}
-          onMouseEnter={(e) => {
-            if (state.status !== "loading") (e.currentTarget as HTMLElement).style.background = "var(--primary-hover)";
-          }}
-          onMouseLeave={(e) => {
-            (e.currentTarget as HTMLElement).style.background = "var(--primary)";
-          }}
+          className="mt-2 w-full rounded-full bg-[#E8192C] hover:bg-[#c91526] py-4 text-sm font-semibold text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {state.status === "loading" ? "Confirmando..." : "Confirmar reserva"}
         </button>
@@ -256,21 +208,19 @@ function ConfirmacionForm() {
 
 export default function ConfirmacionPage() {
   return (
-    <main className="min-h-screen px-4 py-16 sm:px-8" style={{ background: "var(--bg)" }}>
+    <main className="min-h-screen bg-[#f5f5f5] px-4 py-16 sm:px-8">
       <div className="mx-auto max-w-lg">
         <header className="mb-12">
-          <p className="text-3xl font-black tracking-tight uppercase mb-6" style={{ color: "var(--text)" }}>
-            SOHO<span style={{ color: "var(--primary)" }}>●</span>.color
+          <p className="text-3xl font-black tracking-tight uppercase mb-6 text-[#0a0a0a]">
+            SOHO<span className="text-[#E8192C]">●</span>.color
           </p>
-          <h1 className="text-2xl font-semibold tracking-tight" style={{ color: "var(--text)" }}>
+          <h1 className="text-2xl font-semibold tracking-tight text-[#0a0a0a]">
             Confirma tu reserva
           </h1>
-          <p className="mt-2 text-sm" style={{ color: "var(--text-secondary)" }}>
-            Ingresa tus datos para finalizar
-          </p>
+          <p className="mt-2 text-sm text-[#666666]">Ingresa tus datos para finalizar</p>
         </header>
 
-        <Suspense fallback={<p className="text-sm" style={{ color: "var(--text-secondary)" }}>Cargando...</p>}>
+        <Suspense fallback={<p className="text-sm text-[#666666]">Cargando...</p>}>
           <ConfirmacionForm />
         </Suspense>
       </div>

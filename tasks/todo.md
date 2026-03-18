@@ -49,3 +49,4 @@
 - Identidad visual SOHO.color aplicada (#E8192C, #f5f5f5, logo con punto rojo)
 - Flujo completo: sede → servicio → estilista → horario → confirmación
 - Vista agenda promotora con grilla por estilista y auto-refresh
+- Fix: event handlers eliminados de server components, reemplazados por Tailwind hover:
