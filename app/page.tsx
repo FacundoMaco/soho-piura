@@ -65,6 +65,12 @@ export default async function HomePage() {
             ))}
           </ul>
         )}
+
+        <footer className="mt-16 text-center">
+          <Link href="/staff" className="text-xs text-[#888888] hover:text-[#666666] transition-colors">
+            Staff
+          </Link>
+        </footer>
       </div>
     </main>
   );

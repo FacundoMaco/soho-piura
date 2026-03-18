@@ -45,8 +45,17 @@
 
 ---
 
+## Fase 7: Autenticación staff
+- [x] Instalar @supabase/ssr
+- [x] lib/supabase-server.ts — cliente para server components
+- [x] middleware.ts — protege /agenda, redirige a /staff si no hay sesión
+- [x] app/staff/page.tsx — login con email + password
+- [x] app/agenda/page.tsx — botón "Cerrar sesión"
+- [x] app/page.tsx — link discreto "Staff" en footer
+
 ## Review
 - Identidad visual SOHO.color aplicada (#E8192C, #f5f5f5, logo con punto rojo)
 - Flujo completo: sede → servicio → estilista → horario → confirmación
 - Vista agenda promotora con grilla por estilista y auto-refresh
 - Fix: event handlers eliminados de server components, reemplazados por Tailwind hover:
+- Acceso staff protegido con Supabase Auth + middleware Next.js

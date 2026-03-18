@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 
 type Sede = {
@@ -73,6 +74,7 @@ function cellStyle(estado: Reserva['estado']): React.CSSProperties {
 const SLOT_HEIGHT_PX = 48
 
 export default function AgendaPage() {
+  const router = useRouter()
   const today = new Date().toISOString().slice(0, 10)
 
   const [fecha, setFecha] = useState(today)
@@ -83,6 +85,11 @@ export default function AgendaPage() {
   const [reservas, setReservas] = useState<Reserva[]>([])
   const [loading, setLoading] = useState(false)
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  async function handleSignOut() {
+    await supabase.auth.signOut()
+    router.push('/staff')
+  }
 
   useEffect(() => {
     supabase
@@ -179,6 +186,12 @@ export default function AgendaPage() {
                 Cargando...
               </span>
             )}
+            <button
+              onClick={handleSignOut}
+              className="rounded-lg border border-[#e0e0e0] bg-white px-3 py-1.5 text-sm text-[#666666] hover:border-[#E8192C] hover:text-[#E8192C] transition-colors"
+            >
+              Cerrar sesión
+            </button>
           </div>
         </div>
       </header>
