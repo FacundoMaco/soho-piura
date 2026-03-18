@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
+import { createSupabaseBrowserClient } from '@/lib/supabase-browser'
 
 type Sede = {
   id: string
@@ -87,7 +88,8 @@ export default function AgendaPage() {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   async function handleSignOut() {
-    await supabase.auth.signOut()
+    const browserClient = createSupabaseBrowserClient()
+    await browserClient.auth.signOut()
     router.push('/staff')
   }
 

@@ -48,10 +48,12 @@
 ## Fase 7: Autenticación staff
 - [x] Instalar @supabase/ssr
 - [x] lib/supabase-server.ts — cliente para server components
+- [x] lib/supabase-browser.ts — createBrowserClient para client components de auth
 - [x] middleware.ts — protege /agenda, redirige a /staff si no hay sesión
-- [x] app/staff/page.tsx — login con email + password
-- [x] app/agenda/page.tsx — botón "Cerrar sesión"
+- [x] app/staff/page.tsx — login con email + password (fix: createBrowserClient para cookies)
+- [x] app/agenda/page.tsx — botón "Cerrar sesión" (fix: signOut con createBrowserClient)
 - [x] app/page.tsx — link discreto "Staff" en footer
+- [x] Fix: login colgado — mismatch localStorage vs cookies entre supabase-js y ssr
 
 ## Review
 - Identidad visual SOHO.color aplicada (#E8192C, #f5f5f5, logo con punto rojo)

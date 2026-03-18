@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { supabase } from '@/lib/supabase'
+import { createSupabaseBrowserClient } from '@/lib/supabase-browser'
 
 export default function StaffPage() {
   const router = useRouter()
@@ -16,10 +16,13 @@ export default function StaffPage() {
     setLoading(true)
     setError(null)
 
-    const { error: authError } = await supabase.auth.signInWithPassword({
+    const supabase = createSupabaseBrowserClient()
+    const { data, error: authError } = await supabase.auth.signInWithPassword({
       email: email.trim(),
       password,
     })
+
+    console.log('[staff/login]', { data, error: authError })
 
     if (authError) {
       setError('Credenciales incorrectas')
